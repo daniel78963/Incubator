@@ -7,6 +7,30 @@
         mc:Ignorable="d"
         Title="{Binding TituloVentana}" Height="450" Width="800">
     <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
 
+            <TextBlock Text="{Binding TituloVentana}" 
+                       FontSize="20" 
+                       FontWeight="Bold"
+                       TextAlignment="Center"
+                       Margin="0,0,0,10"/>
+
+            <TextBlock Text="{Binding ContadorClicks, StringFormat='Clics: {0}'}" 
+                       FontSize="16" 
+                       TextAlignment="Center"
+                       Margin="0,0,0,30"/>
+
+            <Button Content="Saludar al ViewModel" 
+                    Command="{Binding SaludarCommand}" 
+                    Padding="10,5" 
+                    Margin="0,0,0,10"
+                    Width="200"/>
+
+            <Button Content="Simular Carga Asíncrona" 
+                    Command="{Binding CargarDatosCommand}" 
+                    Padding="10,5" 
+                    Width="200"/>
+
+        </StackPanel>
     </Grid>
 </Window>
