@@ -21,6 +21,9 @@ namespace Incubator.Desktop.ViewModels
         [ObservableProperty]
         private int _contadorClicks = 0;
 
+        [ObservableProperty]
+        private string _mensaje = "Esperando acción...";
+
         // 1. Comando Síncrono Normal
         // El toolkit genera automáticamente un ICommand público llamado 'SaludarCommand'
         // (toma el nombre de tu método y le agrega el sufijo 'Command').
@@ -43,6 +46,20 @@ namespace Incubator.Desktop.ViewModels
             await Task.Delay(2000);
 
             TituloVentana = "¡Datos cargados exitosamente!";
+        }
+
+        // Al agregar un parámetro (string nombre), el toolkit genera un 
+        // comando que ESPERA recibir un string.
+        [RelayCommand]
+        private void SaludarUsuario(string nombre)
+        {
+            if (string.IsNullOrWhiteSpace(nombre))
+            {
+                Mensaje = "Por favor, ingresa un nombre.";
+                return;
+            }
+
+            Mensaje = $"¡Hola, {nombre}! Parámetro recibido correctamente.";
         }
     }
 }

@@ -32,5 +32,17 @@
                     Width="200"/>
 
         </StackPanel>
+        <StackPanel Margin="20" HorizontalAlignment="Center">
+
+            <TextBlock Text="{Binding Mensaje}" Margin="0,0,0,20" />
+
+            <TextBox x:Name="TxtNombre" Width="200" Margin="0,0,0,10" />
+
+            <Button Content="Enviar Nombre al ViewModel"
+            Command="{Binding SaludarUsuarioCommand}"
+            CommandParameter="{Binding ElementName=TxtNombre, Path=Text}" 
+            Width="200" Padding="10"/>
+
+        </StackPanel>
     </Grid>
 </Window>
