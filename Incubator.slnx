@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Incubator.Desktop/Incubator.Desktop.csproj" Id="b4f8cb9e-476d-41d5-bb0a-fae9a5953215" />
+  </Folder>
+  <Folder Name="/test/" />
+</Solution>
