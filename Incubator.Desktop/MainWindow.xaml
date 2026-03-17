@@ -4,10 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator.Desktop"
+        xmlns:viewmodels="clr-namespace:Incubator.Desktop.ViewModels"
+        xmlns:views="clr-namespace:Incubator.Desktop.Views"
         mc:Ignorable="d"
         Title="{Binding TituloVentana}" Height="450" Width="800">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:InicioViewModel}">
+            <views:InicioView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:ConfiguracionViewModel}">
+            <views:ConfiguracionView />
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+        
+        <!--<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
 
             <TextBlock Text="{Binding TituloVentana}" 
                        FontSize="20" 
@@ -43,6 +55,19 @@
             CommandParameter="{Binding ElementName=TxtNombre, Path=Text}" 
             Width="200" Padding="10"/>
 
-        </StackPanel>
+        </StackPanel>-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Background="#EEE">
+                <Button Content="Ir a Inicio" Command="{Binding NavegarAInicioCommand}" Margin="0,0,0,10"/>
+                <Button Content="Ir a Configuración" Command="{Binding NavegarAConfiguracionCommand}"/>
+            </StackPanel>
+
+            <ContentControl Grid.Column="1" Content="{Binding VistaActual}" Margin="20" />
+        </Grid>
     </Grid>
 </Window>

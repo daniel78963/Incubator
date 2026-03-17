@@ -1,12 +1,14 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Incubator.Desktop.Services;
+//using Incubator.Desktop.Views;
+using Incubator.Desktop.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting;
 using System.Configuration;
 using System.Data;
 using System.Windows;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System.Windows;
-//using Incubator.Desktop.Views;
-using Incubator.Desktop.ViewModels;
 
 namespace Incubator.Desktop
 {
@@ -39,6 +41,18 @@ namespace Incubator.Desktop
 
                     // Ejemplo de cómo leer una sección específica del appsettings.json si lo necesitas
                     // var miConfig = hostContext.Configuration.GetSection("MiConfiguracion").Get<MiConfiguracionObj>();
+
+                    // 1. Registramos el servicio de navegación como Singleton (solo uno en toda la app)
+                    services.AddSingleton<INavigationService, NavigationService>(provider =>
+                    {
+                        // Le enseñamos al servicio cómo obtener los ViewModels del contenedor
+                        return new NavigationService(viewModelType =>
+                            (ObservableObject)provider.GetRequiredService(viewModelType));
+                    });
+                    // 2. Registramos TODOS nuestros ViewModels
+                    services.AddTransient<InicioViewModel>();
+                    services.AddTransient<ConfiguracionViewModel>();
+                    services.AddSingleton<MainViewModel>();
                 })
                 .Build();
         }

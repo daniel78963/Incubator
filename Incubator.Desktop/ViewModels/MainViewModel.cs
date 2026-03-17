@@ -1,14 +1,57 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Incubator.Desktop.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Navigation;
 
 namespace Incubator.Desktop.ViewModels
 {
     // Heredar de ObservableObject nos da toda la plomería necesaria para notificar a la vista
     public partial class MainViewModel : ObservableObject
     {
+        private readonly INavigationService _navigationService;
+
+        //// Esta propiedad guarda el ViewModel que está activo actualmente.
+        //// Usamos 'ObservableObject' como tipo base para que acepte cualquier ViewModel.
+        //[ObservableProperty]
+        //private ObservableObject _vistaActual;
+
+        // Exponemos la vista actual para que el XAML haga el Binding
+        public ObservableObject VistaActual => _navigationService.VistaActual;
+
+        //public MainViewModel()
+        // Inyectamos el servicio por constructor
+        public MainViewModel(INavigationService navigationService)
+        {
+            //// Vista por defecto al arrancar
+            //VistaActual = new InicioViewModel();
+
+            ////(Nota: En un escenario real con Inyección de Dependencias, en lugar de hacer new, le pediríamos estos ViewModels al contenedor, pero esto ilustra el concepto base).
+            
+            _navigationService = navigationService;
+
+            // Nos suscribimos al evento para que cuando el servicio cambie la vista, 
+            // el MainViewModel avise a la UI que la propiedad 'VistaActual' cambió.
+            _navigationService.StateChanged += () => OnPropertyChanged(nameof(VistaActual));
+
+            // Vista inicial
+            _navigationService.NavigateTo<InicioViewModel>();
+        }
+
+        //[RelayCommand]
+        //private void NavegarAInicio() => VistaActual = new InicioViewModel();
+
+        //[RelayCommand]
+        //private void NavegarAConfiguracion() => VistaActual = new ConfiguracionViewModel();
+        // Los comandos ahora simplemente llaman al servicio
+        [RelayCommand]
+        private void NavegarAInicio() => _navigationService.NavigateTo<InicioViewModel>();
+
+        [RelayCommand]
+        private void NavegarAConfiguracion() => _navigationService.NavigateTo<ConfiguracionViewModel>();
+
         // El toolkit generará automáticamente una propiedad pública 'TituloVentana'
         // que avisa a la vista cuando su valor cambia.
         [ObservableProperty]
