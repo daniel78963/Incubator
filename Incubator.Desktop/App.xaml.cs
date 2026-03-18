@@ -53,6 +53,7 @@ namespace Incubator.Desktop
 
                     // 3. Registrar Servicios y configuración de otras capas (Infrastructure, Application)
                     // services.AddSingleton<IMiServicio, MiServicio>();
+                    services.AddSingleton<IDialogService, DialogService>();
 
                     // Ejemplo de cómo leer una sección específica del appsettings.json si lo necesitas
                     // var miConfig = hostContext.Configuration.GetSection("MiConfiguracion").Get<MiConfiguracionObj>();
