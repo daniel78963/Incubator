@@ -4,7 +4,10 @@ using Incubator.Application.UseCases;
 using Incubator.Desktop.Services;
 //using Incubator.Desktop.Views;
 using Incubator.Desktop.ViewModels;
+using Incubator.Infrastructure.Data;
 using Incubator.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -12,6 +15,7 @@ using System.Configuration;
 using System.Data;
 using System.Windows;
 using System.Windows;
+using System.Windows.Media.Media3D;
 
 namespace Incubator.Desktop
 {
@@ -30,6 +34,14 @@ namespace Incubator.Desktop
                 {
                     // El CreateDefaultBuilder ya carga 'appsettings.json' y 'appsettings.Development.json' por defecto.
                     // La configuración está disponible en hostContext.Configuration
+
+                    //Leemos la cadena de conexión del appsettings.json
+                    string? dBConnection = hostContext.Configuration.GetConnectionString("MyDbConnection");
+                    //Registramos el DbContext
+                    services.AddDbContext<MyDbContext>(options =>
+                    {
+                        options.UseSqlServer(dBConnection);
+                    });
 
                     // 1. Registrar Vistas (Windows)
                     // Usamos Singleton para la ventana principal porque solo habrá una en toda la app.
