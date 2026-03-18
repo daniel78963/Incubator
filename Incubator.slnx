@@ -3,6 +3,7 @@
     <Project Path="Incubator.Application/Incubator.Application.csproj" Id="cc246fdd-2c67-4975-bd90-d5e2b4425e1c" />
     <Project Path="Incubator.Desktop/Incubator.Desktop.csproj" Id="b4f8cb9e-476d-41d5-bb0a-fae9a5953215" />
     <Project Path="Incubator.Domain/Incubator.Domain.csproj" Id="ee28cd72-2ab9-4cfa-a33e-f8a19346d017" />
+    <Project Path="Incubator.Infrastructure/Incubator.Infrastructure.csproj" Id="9730dc99-d478-4ae4-b2bc-a6283cca11bf" />
   </Folder>
   <Folder Name="/test/" />
 </Solution>

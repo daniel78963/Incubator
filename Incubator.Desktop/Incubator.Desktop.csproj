@@ -18,6 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Incubator.Application\Incubator.Application.csproj" />
+    <ProjectReference Include="..\Incubator.Domain\Incubator.Domain.csproj" />
+    <ProjectReference Include="..\Incubator.Infrastructure\Incubator.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

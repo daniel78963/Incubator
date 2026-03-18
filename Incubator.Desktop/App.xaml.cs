@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Incubator.Application.Interfaces;
+using Incubator.Application.UseCases;
 using Incubator.Desktop.Services;
 //using Incubator.Desktop.Views;
 using Incubator.Desktop.ViewModels;
+using Incubator.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -15,7 +18,7 @@ namespace Incubator.Desktop
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         // Exponemos el Host por si necesitamos acceder a los servicios globalmente
         public static IHost? AppHost { get; private set; }
@@ -42,6 +45,11 @@ namespace Incubator.Desktop
                     // Ejemplo de cómo leer una sección específica del appsettings.json si lo necesitas
                     // var miConfig = hostContext.Configuration.GetSection("MiConfiguracion").Get<MiConfiguracionObj>();
 
+                    // 1. Capa Infrastructure: Registramos la implementación real del repositorio
+                    services.AddTransient<IClientRepository, ClientRepository>();
+                    // 2. Capa Application: Registramos los casos de uso
+                    services.AddTransient<IGetClientsUseCase, GetClientsUseCase>();
+
                     // 1. Registramos el servicio de navegación como Singleton (solo uno en toda la app)
                     services.AddSingleton<INavigationService, NavigationService>(provider =>
                     {
@@ -49,6 +57,7 @@ namespace Incubator.Desktop
                         return new NavigationService(viewModelType =>
                             (ObservableObject)provider.GetRequiredService(viewModelType));
                     });
+
                     // 2. Registramos TODOS nuestros ViewModels
                     services.AddTransient<InicioViewModel>();
                     services.AddTransient<ConfiguracionViewModel>();

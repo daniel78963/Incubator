@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Incubator.Application\Incubator.Application.csproj" />
     <ProjectReference Include="..\Incubator.Domain\Incubator.Domain.csproj" />
   </ItemGroup>
 
