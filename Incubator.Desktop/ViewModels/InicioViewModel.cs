@@ -1,42 +1,78 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
-using Incubator.Domain.Entities;
 using Incubator.Application.UseCases;
+using Incubator.Desktop.Services;
+using Incubator.Domain.Entities;
+using System.Collections.ObjectModel;
 
 namespace Incubator.Desktop.ViewModels
 {
     public partial class InicioViewModel : ObservableObject
     {
         private readonly IGetClientsUseCase _obtenerClientesUseCase;
+        private readonly IDialogService _dialogService;
 
         // ObservableCollection avisa a la vista automáticamente cuando se añaden o quitan elementos
-        public ObservableCollection<Client> Clientes { get; } = new();
+        public ObservableCollection<Client> Clients { get; } = new();  
 
         [ObservableProperty]
         private bool _isLoading;
 
         // Pedimos el caso de uso por constructor
-        public InicioViewModel(IGetClientsUseCase obtenerClientesUseCase)
+        public InicioViewModel(IGetClientsUseCase obtenerClientesUseCase,        IDialogService dialogService)
         {
             _obtenerClientesUseCase = obtenerClientesUseCase;
+            _dialogService = dialogService;
         }
 
         [RelayCommand]
         private async Task CargarDatosAsync()
         {
             IsLoading = true;
-            Clientes.Clear();
+            Clients.Clear();
 
-            // Ejecutamos la lógica de negocio puramente agnóstica de la UI
-            var resultado = await _obtenerClientesUseCase.EjecutarAsync();
-
-            foreach (var cliente in resultado)
+            try
             {
-                Clientes.Add(cliente);
-            }
+                // Ejecutamos la lógica de negocio puramente agnóstica de la UI
+                var resultado = await _obtenerClientesUseCase.EjecutarAsync();
 
-            IsLoading = false;
+                foreach (var cliente in resultado)
+                {
+                    Clients.Add(cliente);
+                }
+            }
+            catch (Exception ex)
+            {
+                // ¡Aquí usamos el servicio! Si la base de datos está caída, el usuario se entera.
+                _dialogService.ShowMessage(
+                    "Error de Conexión",
+                    $"No se pudieron cargar los clientes. Detalle: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        // Ejemplo de un comando para eliminar que requiere confirmación
+        [RelayCommand]
+        private void DeleteClient(Client clienteSeleccionado)
+        {
+            if (clienteSeleccionado == null) return;
+
+            // Pedimos confirmación sin tocar el UI desde el ViewModel
+            bool confirmar = _dialogService.ConfirmationMessage(
+                "Eliminar Cliente",
+                $"¿Estás seguro de que deseas eliminar a {clienteSeleccionado.Name}?");
+
+            if (confirmar)
+            {
+                // Aquí llamarías a tu caso de uso para eliminar:
+                // await _eliminarClienteUseCase.EjecutarAsync(clienteSeleccionado.Id);
+
+                Clients.Remove(clienteSeleccionado);
+                _dialogService.ShowMessage("Éxito", "El cliente fue eliminado correctamente.");
+            }
         }
     }
 }
