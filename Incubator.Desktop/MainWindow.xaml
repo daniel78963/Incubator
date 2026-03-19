@@ -16,6 +16,10 @@
         <DataTemplate DataType="{x:Type viewmodels:ConfiguracionViewModel}">
             <views:ConfiguracionView />
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:CrearClienteViewModel}">
+            <views:CrearClienteView />
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         
@@ -64,7 +68,8 @@
 
             <StackPanel Grid.Column="0" Background="#EEE">
                 <Button Content="Ir a Inicio" Command="{Binding NavegarAInicioCommand}" Margin="0,0,0,10"/>
-                <Button Content="Ir a Configuración" Command="{Binding NavegarAConfiguracionCommand}"/>
+                <Button Content="Ir a Configuración" Command="{Binding NavegarAConfiguracionCommand}" Margin="0,0,0,10"/>
+                <Button Content="Ir a Crear Cliente" Command="{Binding NavegarACrearClienteCommand}"/>
             </StackPanel>
 
             <ContentControl Grid.Column="1" Content="{Binding VistaActual}" Margin="20" />

@@ -74,6 +74,7 @@ namespace Incubator.Desktop
                     // 2. Registramos TODOS nuestros ViewModels
                     services.AddTransient<InicioViewModel>();
                     services.AddTransient<ConfiguracionViewModel>();
+                    services.AddTransient<CrearClienteViewModel>();
                     services.AddSingleton<MainViewModel>();
                 })
                 .Build();

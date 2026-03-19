@@ -52,6 +52,9 @@ namespace Incubator.Desktop.ViewModels
         [RelayCommand]
         private void NavegarAConfiguracion() => _navigationService.NavigateTo<ConfiguracionViewModel>();
 
+        [RelayCommand]
+        private void NavegarACrearCliente() => _navigationService.NavigateTo<CrearClienteViewModel>();
+
         // El toolkit generará automáticamente una propiedad pública 'TituloVentana'
         // que avisa a la vista cuando su valor cambia.
         [ObservableProperty]
