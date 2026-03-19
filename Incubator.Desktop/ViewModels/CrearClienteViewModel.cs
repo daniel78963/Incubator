@@ -1,11 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging; // Importante para el WeakReferenceMessenger
+using Incubator.Desktop.Messages;
 using Incubator.Desktop.Services;
-using System;
-using System.Collections.Generic;
+using Incubator.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Incubator.Desktop.ViewModels
 {
@@ -45,6 +44,21 @@ namespace Incubator.Desktop.ViewModels
 
             // Si llegamos aquí, los datos son válidos en la UI.
             // Aquí llamarías a tu caso de uso: await _crearClienteUseCase.EjecutarAsync(Nombre, Correo);
+            // Simulamos la creación del cliente
+            var newClient = new Client
+            {
+                Id = new Random().Next(100, 999), // ID simulado
+                Name = this.Name,
+                Email = this.Email
+            };
+
+            // ENVIAMOS EL MENSAJE
+            // Usamos el mensajero por defecto del toolkit para emitir el evento a toda la app
+            WeakReferenceMessenger.Default.Send(new ClientCreatedMessage(newClient));
+
+            // Limpiamos el formulario o cerramos la vista...
+            Name = string.Empty;
+            Email = string.Empty;
 
             _dialogService.ShowMessage("Éxito", $"Cliente {Name} guardado correctamente.");
         }

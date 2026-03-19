@@ -1,28 +1,33 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging; // Para el Messenger
 using Incubator.Application.UseCases;
+using Incubator.Desktop.Messages;
 using Incubator.Desktop.Services;
 using Incubator.Domain.Entities;
 using System.Collections.ObjectModel;
 
 namespace Incubator.Desktop.ViewModels
 {
-    public partial class InicioViewModel : ObservableObject
+    public partial class InicioViewModel : ObservableObject, IRecipient<ClientCreatedMessage>
     {
         private readonly IGetClientsUseCase _obtenerClientesUseCase;
         private readonly IDialogService _dialogService;
 
         // ObservableCollection avisa a la vista automáticamente cuando se añaden o quitan elementos
-        public ObservableCollection<Client> Clients { get; } = new();  
+        public ObservableCollection<Client> Clients { get; } = new();
 
         [ObservableProperty]
         private bool _isLoading;
 
         // Pedimos el caso de uso por constructor
-        public InicioViewModel(IGetClientsUseCase obtenerClientesUseCase,        IDialogService dialogService)
+        public InicioViewModel(IGetClientsUseCase obtenerClientesUseCase, IDialogService dialogService)
         {
             _obtenerClientesUseCase = obtenerClientesUseCase;
             _dialogService = dialogService;
+            // 2. Nos registramos en el mensajero al construir el ViewModel
+            // Esto le dice al Messenger: "Avísame cuando alguien envíe un ClienteCreadoMessage"
+            WeakReferenceMessenger.Default.Register(this);
         }
 
         [RelayCommand]
@@ -73,6 +78,17 @@ namespace Incubator.Desktop.ViewModels
                 Clients.Remove(clienteSeleccionado);
                 _dialogService.ShowMessage("Éxito", "El cliente fue eliminado correctamente.");
             }
+        }
+
+        // 3. Implementamos el método obligatorio de la interfaz IRecipient
+        public void Receive(ClientCreatedMessage message)
+        {
+            // El toolkit nos pasa el mensaje. La propiedad 'Value' contiene el Cliente que enviamos.
+            Client nuevoCliente = message.Value;
+
+            // Lo agregamos a nuestra lista. Como es una ObservableCollection, 
+            // la tabla (DataGrid) en la UI se actualizará instantáneamente.
+            Clients.Add(nuevoCliente);
         }
     }
 }
