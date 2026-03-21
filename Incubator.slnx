@@ -6,5 +6,7 @@
     <Project Path="Incubator.Infrastructure/Incubator.Infrastructure.csproj" Id="9730dc99-d478-4ae4-b2bc-a6283cca11bf" />
     <Project Path="Incubator.LegacyBridge/Incubator.LegacyBridge.csproj" Id="e448d16f-1d4c-4d44-ba0b-b1b2051694a7" />
   </Folder>
-  <Folder Name="/test/" />
+  <Folder Name="/test/">
+    <Project Path="Incubator.UnitTests/Incubator.UnitTests.csproj" Id="1a823caa-7472-4292-b168-061f9461eb1e" />
+  </Folder>
 </Solution>
