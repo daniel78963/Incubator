@@ -8,6 +8,7 @@ namespace Incubator.Application.Interfaces
     // bajo el capó, requiere esa DLL antigua.
     public interface ILegacyCalculatorService
     {
-        Task<int> CalculateComplexValueAsync(int input);
+        // Usamos CancellationToken para poder cancelar o aplicar timeouts
+        Task<int> CalculateComplexValueAsync(int input, CancellationToken cancellationToken = default);
     }
 }
