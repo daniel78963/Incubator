@@ -6,7 +6,8 @@ using System.Text;
 
 namespace Incubator.Infrastructure.Services
 {
-    public class LegacyWrapperService : ILegacyCalculatorService
+    //public class LegacyWrapperService : ILegacyCalculatorService
+    public class LegacyWrapperService  
     {
         public async Task<int> CalculateComplexValueAsync(int input)
         {

@@ -6,6 +6,7 @@ using Incubator.Desktop.Services;
 using Incubator.Desktop.ViewModels;
 using Incubator.Infrastructure.Data;
 using Incubator.Infrastructure.Repositories;
+using Incubator.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -76,6 +77,8 @@ namespace Incubator.Desktop
                     services.AddTransient<ConfiguracionViewModel>();
                     services.AddTransient<CrearClienteViewModel>();
                     services.AddSingleton<MainViewModel>();
+
+                    services.AddTransient<ILegacyCalculatorService, LegacyCalculatorService>();
                 })
                 .Build();
         }

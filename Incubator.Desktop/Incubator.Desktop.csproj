@@ -22,6 +22,7 @@
     <ProjectReference Include="..\Incubator.Application\Incubator.Application.csproj" />
     <ProjectReference Include="..\Incubator.Domain\Incubator.Domain.csproj" />
     <ProjectReference Include="..\Incubator.Infrastructure\Incubator.Infrastructure.csproj" />
+    <ProjectReference Include="..\Incubator.LegacyBridge\Incubator.LegacyBridge.csproj" />
   </ItemGroup>
 
   <ItemGroup>
