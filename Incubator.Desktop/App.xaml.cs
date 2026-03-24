@@ -1,22 +1,20 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Windows;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+
+// Importamos las capas de nuestra Arquitectura Limpia
 using Incubator.Application.Interfaces;
 using Incubator.Application.UseCases;
-using Incubator.Desktop.Services;
-//using Incubator.Desktop.Views;
-using Incubator.Desktop.ViewModels;
 using Incubator.Infrastructure.Data;
 using Incubator.Infrastructure.Repositories;
 using Incubator.Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting;
-using System.Configuration;
-using System.Data;
-using System.Windows;
-using System.Windows;
-using System.Windows.Media.Media3D;
+
+// Importamos la capa de Presentación
+using Incubator.Desktop.Services;
+using Incubator.Desktop.ViewModels;
+using Incubator.Desktop.Views;
 
 namespace Incubator.Desktop
 {
@@ -33,52 +31,62 @@ namespace Incubator.Desktop
             AppHost = Host.CreateDefaultBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    // El CreateDefaultBuilder ya carga 'appsettings.json' y 'appsettings.Development.json' por defecto.
-                    // La configuración está disponible en hostContext.Configuration
-
-                    //Leemos la cadena de conexión del appsettings.json
-                    string? dBConnection = hostContext.Configuration.GetConnectionString("MyDbConnection");
-                    //Registramos el DbContext
+                    // ==========================================================
+                    // 1. CONFIGURACIÓN DE BASE DE DATOS
+                    // ==========================================================
+                    string? dbConnection = hostContext.Configuration.GetConnectionString("MyDbConnection");
                     services.AddDbContext<MyDbContext>(options =>
                     {
-                        options.UseSqlServer(dBConnection);
+                        options.UseSqlServer(dbConnection);
                     });
 
-                    // 1. Registrar Vistas (Windows)
-                    // Usamos Singleton para la ventana principal porque solo habrá una en toda la app.
-                    services.AddSingleton<MainWindow>();
-
-                    // 2. Registrar ViewModels
-                    // Usamos Transient para que cree una nueva instancia si abrimos múltiples vistas iguales.
-                    services.AddTransient<MainViewModel>();
-
-                    // 3. Registrar Servicios y configuración de otras capas (Infrastructure, Application)
-                    // services.AddSingleton<IMiServicio, MiServicio>();
-                    services.AddSingleton<IDialogService, DialogService>();
-
-                    // Ejemplo de cómo leer una sección específica del appsettings.json si lo necesitas
-                    // var miConfig = hostContext.Configuration.GetSection("MiConfiguracion").Get<MiConfiguracionObj>();
-
-                    // 1. Capa Infrastructure: Registramos la implementación real del repositorio
+                    // ==========================================================
+                    // 2. CAPA INFRASTRUCTURE (El detalle técnico)
+                    // ==========================================================
                     services.AddTransient<IClientRepository, ClientRepository>();
-                    // 2. Capa Application: Registramos los casos de uso
+                    services.AddTransient<ILegacyCalculatorService, LegacyCalculatorService>(); // Nuestro puente x86
+
+                    // ==========================================================
+                    // 3. CAPA APPLICATION (Reglas de negocio y casos de uso)
+                    // ==========================================================
                     services.AddTransient<IGetClientsUseCase, GetClientsUseCase>();
 
-                    // 1. Registramos el servicio de navegación como Singleton (solo uno en toda la app)
-                    services.AddSingleton<INavigationService, NavigationService>(provider =>
-                    {
-                        // Le enseñamos al servicio cómo obtener los ViewModels del contenedor
-                        return new NavigationService(viewModelType =>
-                            (ObservableObject)provider.GetRequiredService(viewModelType));
-                    });
+                    // ==========================================================
+                    // 4. SERVICIOS DE INTERFAZ DE USUARIO (Propios)
+                    // ==========================================================
+                    services.AddSingleton<IDialogService, DialogService>();
 
-                    // 2. Registramos TODOS nuestros ViewModels
-                    services.AddTransient<InicioViewModel>();
-                    services.AddTransient<ConfiguracionViewModel>();
-                    services.AddTransient<CrearClienteViewModel>();
+                    // ==========================================================
+                    // 5. SERVICIOS DE INTERFAZ DE USUARIO (WPF UI - Lepo.co)
+                    // ==========================================================
+                    // 5.1. AGREGAMOS EL PROVEEDOR DE PÁGINAS AQUÍ:
+                    services.AddSingleton<Wpf.Ui.Abstractions.INavigationViewPageProvider, PageService>();
+                    // 5.2 Los demás servicios 
+                    services.AddSingleton<Wpf.Ui.INavigationService, Wpf.Ui.NavigationService>();
+                    services.AddSingleton<Wpf.Ui.ISnackbarService, Wpf.Ui.SnackbarService>();
+                    services.AddSingleton<Wpf.Ui.IContentDialogService, Wpf.Ui.ContentDialogService>();
+
+                    // ==========================================================
+                    // 6. REGISTRO DE VENTANA PRINCIPAL (Singleton)
+                    // ==========================================================
+                    services.AddSingleton<MainWindow>();
                     services.AddSingleton<MainViewModel>();
 
-                    services.AddTransient<ILegacyCalculatorService, LegacyCalculatorService>();
+                    // ==========================================================
+                    // 7. REGISTRO DE VISTAS Y SUS VIEWMODELS (Transient)
+                    // ==========================================================
+                    // Usamos Transient para que cada vez que el usuario navegue a una página, 
+                    // se cree una instancia fresca con el estado limpio.
+
+                    services.AddTransient<InicioView>();
+                    services.AddTransient<InicioViewModel>();
+
+                    services.AddTransient<ConfiguracionView>();
+                    services.AddTransient<ConfiguracionViewModel>();
+
+                    // Si agregaste la vista de Crear Cliente, descomenta estas líneas:
+                    // services.AddTransient<CrearClienteView>();
+                    // services.AddTransient<CrearClienteViewModel>();
                 })
                 .Build();
         }
@@ -87,18 +95,19 @@ namespace Incubator.Desktop
         {
             base.OnStartup(e);
 
-            // Iniciamos el Host
+            // Iniciamos el Host genérico
             await AppHost!.StartAsync();
 
             // Le pedimos al contenedor de dependencias que nos dé la ventana principal
-            // Al instanciar MainWindow, el contenedor inyectará automáticamente el MainViewModel si lo necesita en su constructor.
+            // El contenedor se encargará de inyectar automáticamente el MainViewModel, 
+            // el INavigationService de WPF UI, y el IServiceProvider.
             var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
 
         protected override async void OnExit(ExitEventArgs e)
         {
-            // Detenemos el Host de forma limpia al cerrar la app
+            // Detenemos el Host de forma limpia al cerrar la aplicación para liberar recursos
             await AppHost!.StopAsync();
             base.OnExit(e);
         }

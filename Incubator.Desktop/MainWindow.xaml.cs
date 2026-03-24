@@ -1,30 +1,20 @@
-﻿using Incubator.Desktop.ViewModels;
-using System.Windows;
+﻿using System;
+using Wpf.Ui.Controls;
+using Incubator.Desktop.ViewModels;
 
 namespace Incubator.Desktop
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : FluentWindow
     {
-        //public MainWindow()
-        //{
-        //    InitializeComponent();
-        //}
-
-        //Como registramos MainWindow y MainViewModel en nuestro App.xaml.cs, 
-        //    el contenedor de DI es lo suficientemente inteligente para saber que cuando pides la ventana, 
-        //    primero debe crear el ViewModel y pasárselo.
-
-        // Pedimos el ViewModel a través del constructor
-        public MainWindow(MainViewModel viewModel)
+        public MainWindow(
+            MainViewModel viewModel,
+            Wpf.Ui.INavigationService navigationService)
         {
             InitializeComponent();
+            DataContext = viewModel;
 
-            // Establecemos el ViewModel inyectado como el DataContext de esta ventana.
-            // Esto le dice al XAML: "Busca tus datos aquí".
-            this.DataContext = viewModel;
+            // Le decimos al servicio de navegación global qué control visual va a gobernar
+            navigationService.SetNavigationControl(RootNavigation);
         }
     }
 }
