@@ -1,0 +1,3 @@
+- Estructure Onion Architecture
+- Home and menu
+- Read documents and init project

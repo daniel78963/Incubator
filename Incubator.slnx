@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Notes.txt" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="Incubator.Application/Incubator.Application.csproj" Id="cc246fdd-2c67-4975-bd90-d5e2b4425e1c" />
     <Project Path="Incubator.Desktop/Incubator.Desktop.csproj" Id="b4f8cb9e-476d-41d5-bb0a-fae9a5953215" />
