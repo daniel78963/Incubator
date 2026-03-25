@@ -9,7 +9,14 @@
         WindowCornerPreference="Round">
 
     <Grid>
-        <ui:NavigationView x:Name="RootNavigation" 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="Incubator Desktop" Icon="{ui:SymbolIcon Box24}" />
+
+        <ui:NavigationView Grid.Row="1" x:Name="RootNavigation" 
                            PaneDisplayMode="Left"
                            IsBackButtonVisible="Visible"
                            IsPaneToggleVisible="True">
@@ -23,7 +30,6 @@
                                        Icon="{ui:SymbolIcon Settings24}" 
                                        TargetPageType="{x:Type views:ConfiguracionView}" />
             </ui:NavigationView.MenuItems>
-
         </ui:NavigationView>
     </Grid>
 </ui:FluentWindow>

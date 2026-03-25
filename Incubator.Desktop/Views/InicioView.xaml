@@ -1,10 +1,8 @@
 ﻿<UserControl x:Class="Incubator.Desktop.Views.InicioView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Incubator.Desktop.Views"
-        mc:Ignorable="d" Height="450" Width="800">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
     </UserControl.Resources>
@@ -15,28 +13,25 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" 
-                Content="Obtener Clientes" 
-                Command="{Binding CargarDatosCommand}" 
-                Padding="15,5" 
-                HorizontalAlignment="Left" 
-                Margin="0,0,0,15"/>
+        <ui:Button Grid.Row="0" 
+                   Content="Obtener Clientes" 
+                   Command="{Binding CargarDatosCommand}" 
+                   Icon="{ui:SymbolIcon ArrowDownload24}"
+                   Appearance="Primary"
+                   Margin="0,0,0,15"/>
 
-        <DataGrid Grid.Row="1" 
-                  ItemsSource="{Binding Clients}" 
-                  AutoGenerateColumns="True" 
-                  IsReadOnly="True" 
-                  HeadersVisibility="Column" 
-                  AlternatingRowBackground="#F0F0F0">
-        </DataGrid>
+        <ui:DataGrid Grid.Row="1" 
+                     ItemsSource="{Binding Clients}" 
+                     AutoGenerateColumns="True" 
+                     IsReadOnly="True" />
 
         <Grid Grid.Row="1" 
-              Background="#B3FFFFFF" 
+              Background="#80000000" 
               Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisConverter}}">
 
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <ProgressBar IsIndeterminate="True" Width="150" Height="10" Margin="0,0,0,15" />
-                <TextBlock Text="Cargando clientes..." FontSize="16" FontWeight="SemiBold" TextAlignment="Center" />
+                <ui:ProgressRing IsIndeterminate="True" Width="60" Height="60" Margin="0,0,0,15" />
+                <ui:TextBlock Text="Conectando a BD..." FontTypography="Subtitle" Foreground="White" />
             </StackPanel>
 
         </Grid>
