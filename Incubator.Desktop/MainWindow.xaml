@@ -29,6 +29,8 @@
                 <ui:NavigationViewItem Content="Configuración" 
                                        Icon="{ui:SymbolIcon Settings24}" 
                                        TargetPageType="{x:Type views:ConfiguracionView}" />
+                <ui:NavigationViewItem Content="Reportes" 
+                       Icon="{ui:SymbolIcon Document24}"   />
                  
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
