@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Incubator.Desktop.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,9 +19,10 @@ namespace Incubator.Desktop.Views
     /// </summary>
     public partial class CrearClienteView : UserControl
     {
-        public CrearClienteView()
+        public CrearClienteView(CrearClienteViewModel viewModel)
         {
             InitializeComponent();
+            this.DataContext = viewModel;
         }
     }
 }
