@@ -29,7 +29,15 @@
                 <ui:NavigationViewItem Content="Configuración" 
                                        Icon="{ui:SymbolIcon Settings24}" 
                                        TargetPageType="{x:Type views:ConfiguracionView}" />
+                 
             </ui:NavigationView.MenuItems>
+            <ui:NavigationView.FooterMenuItems>
+                <!-- Footer Menu Items here -->
+                <ui:NavigationViewItem Content="Account" Icon="{ui:SymbolIcon PersonBoard24}"  />
+                <ui:NavigationViewItem Content="Help" Icon="{ui:SymbolIcon ChatHelp24}"  />
+                <ui:NavigationViewItem Content="Settings" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type views:ConfiguracionView}" />
+                <!-- The Settings item is typically added automatically, but you can control its visibility with IsSettingsVisible -->
+            </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
     </Grid>
 </ui:FluentWindow>
