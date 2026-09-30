@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Incubator.Desktop.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,9 +18,10 @@ namespace Incubator.Desktop.Views
     /// </summary>
     public partial class ConfiguracionView : UserControl
     {
-        public ConfiguracionView()
+        public ConfiguracionView(ConfiguracionViewModel viewModel)
         {
             InitializeComponent();
+            this.DataContext = viewModel;
         }
     }
 }

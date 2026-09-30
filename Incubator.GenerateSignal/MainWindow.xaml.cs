@@ -1,7 +1,4 @@
-﻿using Incubator.Desktop.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,17 +9,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Incubator.Desktop.Views
+namespace Incubator.GenerateSignal
 {
     /// <summary>
-    /// Interaction logic for CrearClienteView.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class CrearClienteView : UserControl
+    public partial class MainWindow : Window
     {
-        public CrearClienteView(CrearClienteViewModel viewModel)
+        public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = viewModel;
         }
     }
 }

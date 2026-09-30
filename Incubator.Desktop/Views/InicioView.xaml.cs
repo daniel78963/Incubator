@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Incubator.Desktop.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,9 +18,11 @@ namespace Incubator.Desktop.Views
     /// </summary>
     public partial class InicioView : UserControl
     {
-        public InicioView()
+        public InicioView(InicioViewModel viewModel)
         {
             InitializeComponent();
+            // Asigna el contexto de datos
+            this.DataContext = viewModel;
         }
     }
 }
