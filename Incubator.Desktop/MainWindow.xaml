@@ -22,6 +22,10 @@
                            IsPaneToggleVisible="True">
 
             <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="Home" 
+                         Icon="{ui:SymbolIcon Home24}" 
+                         TargetPageType="{x:Type views:HomeView}" />
+                
                 <ui:NavigationViewItem Content="Inicio" 
                                        Icon="{ui:SymbolIcon Home24}" 
                                        TargetPageType="{x:Type views:InicioView}" />

@@ -81,6 +81,9 @@ namespace Incubator.Desktop
                     services.AddTransient<InicioView>();
                     services.AddTransient<InicioViewModel>();
 
+                    services.AddTransient<HomeView>();
+                    services.AddTransient<HomeViewModel>();
+
                     services.AddTransient<ConfiguracionView>();
                     services.AddTransient<ConfiguracionViewModel>();
 
