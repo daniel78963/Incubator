@@ -1,12 +1,57 @@
 ﻿<Window x:Class="Incubator.GenerateSignal.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Incubator.GenerateSignal"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Simulador de Dispositivo - Incubator" Height="450" Width="500"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5">
 
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Título -->
+        <TextBlock Grid.Row="0" Text="Simulador de Señales COM" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <!-- Configuración de Conexión -->
+        <GroupBox Grid.Row="1" Header="Configuración del Puerto" Padding="10" Margin="0,0,0,20">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Margin="0,0,15,0">
+                    <TextBlock Text="Puerto:" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="CmbPorts" Width="120" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,20,0">
+                    <TextBlock Text="Baud Rate:" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="CmbBaudRate" Width="120" />
+                </StackPanel>
+
+                <Button x:Name="BtnConnect" Content="Conectar" Width="100" Height="25" 
+                        VerticalAlignment="Bottom" Click="BtnConnect_Click"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Sección de Envío de Trama -->
+        <GroupBox Grid.Row="2" Header="Generador de Trama (A1A...)" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Trama a enviar:" Margin="0,0,0,5"/>
+                <!-- TextBox para que puedas modificar la trama antes de enviarla -->
+                <TextBox x:Name="TxtFrame" Height="25" VerticalContentAlignment="Center" Padding="5,0"
+                         Text="A1A4622130827032300139999----" FontFamily="Consolas"/>
+
+                <TextBlock Text="* El terminador \r\n se agregará automáticamente al enviar." 
+                           FontSize="11" Foreground="Gray" Margin="0,5,0,15"/>
+
+                <Button x:Name="BtnSendFrame" Content="Enviar Señal" Width="120" Height="30" 
+                        HorizontalAlignment="Right" Click="BtnSendFrame_Click" IsEnabled="False"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Estado -->
+        <TextBlock x:Name="TxtStatus" Grid.Row="3" Text="Desconectado" 
+                   VerticalAlignment="Bottom" Foreground="Gray" FontWeight="SemiBold"/>
     </Grid>
 </Window>

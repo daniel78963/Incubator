@@ -25,7 +25,11 @@
                 <ui:NavigationViewItem Content="Home" 
                          Icon="{ui:SymbolIcon Home24}" 
                          TargetPageType="{x:Type views:HomeView}" />
-                
+
+                <ui:NavigationViewItem Content="Señales COM" 
+                       Icon="{ui:SymbolIcon SerialPort24}" 
+                       TargetPageType="{x:Type views:SignalView}" />
+
                 <ui:NavigationViewItem Content="Inicio" 
                                        Icon="{ui:SymbolIcon Home24}" 
                                        TargetPageType="{x:Type views:InicioView}" />

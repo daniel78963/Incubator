@@ -87,6 +87,9 @@ namespace Incubator.Desktop
                     services.AddTransient<ConfiguracionView>();
                     services.AddTransient<ConfiguracionViewModel>();
 
+                    services.AddTransient<SignalView>();
+                    services.AddTransient<SignalViewModel>();
+
                     // Si agregaste la vista de Crear Cliente, descomenta estas líneas:
                     // services.AddTransient<CrearClienteView>();
                     // services.AddTransient<CrearClienteViewModel>();
