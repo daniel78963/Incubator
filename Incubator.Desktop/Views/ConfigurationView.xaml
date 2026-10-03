@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="Incubator.Desktop.Views.ConfigurationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+
+    <Grid Margin="20">
+        <StackPanel HorizontalAlignment="Left" Width="450">
+            <ui:TextBlock FontTypography="Title" Text="Configuración del Sistema" Margin="0,0,0,20"/>
+
+            <ui:CardControl Margin="0,0,0,15">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <ui:TextBlock FontTypography="BodyStrong" Text="Método de Almacenamiento de Señales"/>
+                        <ui:TextBlock FontTypography="Caption" Text="Elige dónde se guardará el histórico de tramas COM." Foreground="Gray"/>
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="Archivo Plano (.txt)" IsChecked="{Binding IsFlatFileSelected}" Margin="0,0,15,0"/>
+                    <RadioButton Content="Base de Datos (SQL)" IsChecked="{Binding IsDatabaseSelected}"/>
+                </StackPanel>
+            </ui:CardControl>
+
+            <ui:CardControl Margin="0,0,0,20" IsEnabled="{Binding IsFlatFileSelected}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <ui:TextBlock FontTypography="BodyStrong" Text="Formato de Archivo Plano"/>
+                        <ui:TextBlock FontTypography="Caption" Text="Configura el nombre del archivo diario." Foreground="Gray"/>
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <StackPanel>
+                    <ui:TextBox Text="{Binding FileFormat, UpdateSourceTrigger=PropertyChanged}" 
+                                PlaceholderText="Ej. yyyyMMdd" Width="150" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Vista previa de ruta:" FontSize="12" Foreground="Gray"/>
+                    <TextBlock Text="{Binding PreviewFileName}" FontSize="12" FontWeight="SemiBold" Foreground="#2196F3"/>
+                </StackPanel>
+            </ui:CardControl>
+
+            <ui:Button Content="Guardar Configuración" 
+                       Command="{Binding SaveConfigCommand}" 
+                       Icon="{ui:SymbolIcon Save24}"
+                       Appearance="Primary"
+                       HorizontalAlignment="Right"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

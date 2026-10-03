@@ -1,20 +1,18 @@
-﻿using System.Windows;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-
-// Importamos las capas de nuestra Arquitectura Limpia
+﻿// Importamos las capas de nuestra Arquitectura Limpia
 using Incubator.Application.Interfaces;
 using Incubator.Application.UseCases;
-using Incubator.Infrastructure.Data;
-using Incubator.Infrastructure.Repositories;
-using Incubator.Infrastructure.Services;
-
 // Importamos la capa de Presentación
 using Incubator.Desktop.Services;
 using Incubator.Desktop.ViewModels;
 using Incubator.Desktop.Views;
+using Incubator.Infrastructure.Data;
+using Incubator.Infrastructure.Repositories;
+using Incubator.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Windows;
 
 namespace Incubator.Desktop
 {
@@ -45,6 +43,14 @@ namespace Incubator.Desktop
                     // ==========================================================
                     services.AddTransient<IClientRepository, ClientRepository>();
                     services.AddTransient<ILegacyCalculatorService, LegacyCalculatorService>(); // Nuestro puente x86
+
+                    // Servicios de configuración y almacenamiento
+                    services.AddSingleton<IAppConfigService, AppConfigService>();
+                    services.AddTransient<FileFrameStorageService>();
+                    services.AddTransient<DbFrameStorageService>();
+
+                    // Registramos el Orquestador bajo la interfaz principal
+                    services.AddTransient<IFrameStorageService, FrameStorageOrchestrator>();
 
                     // ==========================================================
                     // 3. CAPA APPLICATION (Reglas de negocio y casos de uso)
@@ -89,6 +95,9 @@ namespace Incubator.Desktop
 
                     services.AddTransient<SignalView>();
                     services.AddTransient<SignalViewModel>();
+
+                    services.AddTransient<ConfigurationView>();
+                    services.AddTransient<ConfigurationViewModel>();
 
                     // Si agregaste la vista de Crear Cliente, descomenta estas líneas:
                     // services.AddTransient<CrearClienteView>();

@@ -2,6 +2,7 @@
 {
     public class IncubatorFrame
     {
+        public int Id { get; set; }
         public string RawFrame { get; set; } = string.Empty;
         public string SerialNumber { get; set; } = string.Empty;
         public string Result { get; set; } = string.Empty;

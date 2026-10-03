@@ -1,15 +1,23 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Incubator.Application.Interfaces;
+using Incubator.Domain.Entities;
+using System;
 using System.Collections.ObjectModel;
 using System.IO.Ports;
 using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Incubator.Domain.Entities;
+using WpfApp = System.Windows.Application;
 
 namespace Incubator.Desktop.ViewModels
 {
     public partial class SignalViewModel : ObservableObject
     {
+        private readonly IFrameStorageService _storageService;
+        public SignalViewModel(IFrameStorageService storageService)
+        {
+            _storageService = storageService;
+        }
+
         private SerialPort? _serialPort;
         private string _buffer = string.Empty;
 
@@ -59,21 +67,24 @@ namespace Incubator.Desktop.ViewModels
             }
         }
 
-        private void ProcessFrame(string rawFrame)
+        private async void ProcessFrame(string rawFrame)
         {
             try
             {
                 var decodedFrame = FrameDecoder.Decode(rawFrame);
 
-                // Despachar a la UI ya que SerialPort usa un hilo secundario
-                global::System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                // 1. Guardar la trama (El orquestador decide si va a BD o a TXT)
+                await _storageService.SaveFrameAsync(decodedFrame);
+
+                // 2. Mostrar en UI
+                WpfApp.Current.Dispatcher.Invoke(() =>
                 {
                     FrameHistory.Insert(0, decodedFrame);
                 });
             }
             catch (Exception ex)
             {
-                // Manejar error de decodificación o trama corrupta
+                // Manejo de errores
             }
         }
     }

@@ -30,6 +30,10 @@
                        Icon="{ui:SymbolIcon SerialPort24}" 
                        TargetPageType="{x:Type views:SignalView}" />
 
+                <ui:NavigationViewItem Content="Configuración" 
+                       Icon="{ui:SymbolIcon Settings24}" 
+                       TargetPageType="{x:Type views:ConfigurationView}" />
+
                 <ui:NavigationViewItem Content="Inicio" 
                                        Icon="{ui:SymbolIcon Home24}" 
                                        TargetPageType="{x:Type views:InicioView}" />
