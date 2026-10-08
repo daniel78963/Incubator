@@ -17,20 +17,35 @@
         <TextBlock Grid.Row="0" Text="Simulador de Señales COM" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
 
         <!-- Configuración de Conexión -->
-        <GroupBox Grid.Row="1" Header="Configuración del Puerto" Padding="10" Margin="0,0,0,20">
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Margin="0,0,15,0">
-                    <TextBlock Text="Puerto:" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="CmbPorts" Width="120" />
+        <GroupBox Grid.Row="1" Header="Configuración de Puertos (Simulación Concurrente)" Padding="10" Margin="0,0,0,20">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Canal 1 (COM):" Width="100" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="CmbPort1" Width="120" Margin="0,0,10,0"/>
+                    <!-- Simulamos que este dispositivo tiene este serial -->
+                    <TextBlock Text="Serial Simulado: 9999" Foreground="Gray" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Margin="0,0,20,0">
                     <TextBlock Text="Baud Rate:" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="CmbBaudRate" Width="120" />
+                    <ComboBox x:Name="CmbBaudRate1" Width="120" />
                 </StackPanel>
 
-                <Button x:Name="BtnConnect" Content="Conectar" Width="100" Height="25" 
-                        VerticalAlignment="Bottom" Click="BtnConnect_Click"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Canal 2 (USB):" Width="100" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="CmbPort2" Width="120" Margin="0,0,10,0"/>
+                    <!-- Diferente serial para distinguirlo en la vista final -->
+                    <TextBlock Text="Serial Simulado: 5555" Foreground="Gray" VerticalAlignment="Center"/>
+
+                </StackPanel>
+
+                <StackPanel Margin="0,0,20,0">
+                    <TextBlock Text="Baud Rate:" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="CmbBaudRate2" Width="120" />
+                </StackPanel>
+
+                <Button x:Name="BtnConnect" Content="Conectar Ambos" Width="120" Height="25" 
+                HorizontalAlignment="Left" Click="BtnConnect_Click"/>
             </StackPanel>
         </GroupBox>
 
@@ -45,8 +60,14 @@
                 <TextBlock Text="* El terminador \r\n se agregará automáticamente al enviar." 
                            FontSize="11" Foreground="Gray" Margin="0,5,0,15"/>
 
-                <Button x:Name="BtnSendFrame" Content="Enviar Señal" Width="120" Height="30" 
-                        HorizontalAlignment="Right" Click="BtnSendFrame_Click" IsEnabled="False"/>
+                <!--<Button x:Name="BtnSendFrame" Content="Enviar Señal" Width="120" Height="30" 
+                        HorizontalAlignment="Right" Click="BtnSendFrame_Click" IsEnabled="False"/>-->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="BtnSendBoth" Content="Enviar a Ambos Canales (Test Concurrencia)" 
+            Width="250" Height="30" Margin="0,0,10,0" Click="BtnSendBoth_Click" IsEnabled="False"/>
+                    <Button x:Name="BtnSendFrame" Content="Enviar Señal (Solo 1)" 
+            Width="120" Height="30" Click="BtnSendFrame_Click" IsEnabled="False"/>
+                </StackPanel>
             </StackPanel>
         </GroupBox>
 

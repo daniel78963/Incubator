@@ -9,6 +9,7 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -17,7 +18,7 @@
             <StackPanel Margin="0,0,20,0">
                 <ui:TextBlock Text="Puerto COM Disponible:" Margin="0,0,0,5" FontTypography="BodyStrong" />
                 <ComboBox ItemsSource="{Binding AvailablePorts}" 
-                          SelectedItem="{Binding SelectedPort}" 
+                          SelectedItem="{Binding SelectedPort1}" 
                           Width="160" Height="32" />
             </StackPanel>
 
@@ -34,8 +35,29 @@
             </StackPanel>
         </StackPanel>
 
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,20">
+            <StackPanel Margin="0,0,20,0">
+                <ui:TextBlock Text="Puerto COM Disponible (USB):" Margin="0,0,0,5" FontTypography="BodyStrong" />
+                <ComboBox ItemsSource="{Binding AvailablePorts}" 
+                   SelectedItem="{Binding SelectedPort2}" 
+                   Width="160" Height="32" />
+            </StackPanel>
+
+            <ui:Button Content="Conectar a Dispositivo" 
+                Command="{Binding ConnectCommand}" 
+                Icon="{ui:SymbolIcon PlugConnected24}"
+                Appearance="Primary"
+                VerticalAlignment="Bottom"
+                Margin="0,0,20,0"/>
+
+            <StackPanel VerticalAlignment="Bottom" Margin="0,0,0,6">
+                <ui:TextBlock Text="Estado:" FontTypography="Caption" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                <ui:TextBlock Text="{Binding ConnectionStatus}" FontTypography="BodyStrong" />
+            </StackPanel>
+        </StackPanel>
+
         <!-- Sección Inferior: Histórico de Tramas Decodificadas -->
-        <ui:DataGrid Grid.Row="1" 
+        <ui:DataGrid Grid.Row="2" 
                      ItemsSource="{Binding FrameHistory}" 
                      AutoGenerateColumns="False" 
                      IsReadOnly="True" 
