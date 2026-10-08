@@ -20,6 +20,9 @@ namespace Incubator.Desktop.ViewModels
         private bool _isDatabaseSelected;
 
         [ObservableProperty]
+        private bool _isStoreEncryptedSelected;
+
+        [ObservableProperty]
         private string _fileFormat = string.Empty;
 
         [ObservableProperty]
@@ -37,6 +40,7 @@ namespace Incubator.Desktop.ViewModels
             var config = _configService.GetConfig();
             IsFlatFileSelected = config.StorageType == StorageMethod.FlatFile;
             IsDatabaseSelected = config.StorageType == StorageMethod.Database;
+            IsStoreEncryptedSelected = config.StoreEncrypted;
             FileFormat = config.FlatFileFormat;
             UpdatePreview();
         }
@@ -64,7 +68,8 @@ namespace Incubator.Desktop.ViewModels
             var config = new AppConfiguration
             {
                 StorageType = IsDatabaseSelected ? StorageMethod.Database : StorageMethod.FlatFile,
-                FlatFileFormat = FileFormat
+                FlatFileFormat = FileFormat,
+                StoreEncrypted = IsStoreEncryptedSelected
             };
 
             _configService.SaveConfig(config);

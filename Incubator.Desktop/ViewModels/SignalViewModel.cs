@@ -14,6 +14,7 @@ namespace Incubator.Desktop.ViewModels
     public partial class SignalViewModel : ObservableObject
     {
         private readonly IFrameStorageService _storageService;
+        private readonly IEncryptionService _encryptionService;
 
         // El Canal (Cola concurrente de alto rendimiento)
         private readonly Channel<string> _frameQueue;
@@ -34,9 +35,10 @@ namespace Incubator.Desktop.ViewModels
 
         public string[] AvailablePorts => SerialPort.GetPortNames();
 
-        public SignalViewModel(IFrameStorageService storageService)
+        public SignalViewModel(IFrameStorageService storageService, IEncryptionService encryptionService)
         {
             _storageService = storageService;
+            _encryptionService = encryptionService;
 
             // Creamos un canal sin límite de capacidad
             _frameQueue = Channel.CreateUnbounded<string>();
@@ -97,18 +99,53 @@ namespace Incubator.Desktop.ViewModels
         // EL CONSUMIDOR: Procesa una a una las tramas encoladas
         private async Task ProcessQueueAsync()
         {
+            //// Este bucle se mantiene vivo siempre y se despierta cuando entra una trama al canal
+            //await foreach (var rawFrame in _frameQueue.Reader.ReadAllAsync())
+            //{
+            //    try
+            //    {
+            //        // 1. Armado y Decodificación
+            //        var decodedFrame = FrameDecoder.Decode(rawFrame);
+
+            //        // 2. Almacenamiento (BD o TXT según configuración)
+            //        await _storageService.SaveFrameAsync(decodedFrame);
+
+            //        // 3. Mostrar en UI
+            //        WpfApp.Current.Dispatcher.Invoke(() =>
+            //        {
+            //            FrameHistory.Insert(0, decodedFrame);
+            //        });
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        // Log: Trama corrupta o error de BD
+            //    }
+            //}
+
             // Este bucle se mantiene vivo siempre y se despierta cuando entra una trama al canal
-            await foreach (var rawFrame in _frameQueue.Reader.ReadAllAsync())
+            await foreach (var rawIncomingFrame in _frameQueue.Reader.ReadAllAsync())
             {
                 try
                 {
-                    // 1. Armado y Decodificación
-                    var decodedFrame = FrameDecoder.Decode(rawFrame);
+                    string frameToDecode = rawIncomingFrame.TrimEnd(); // Eliminar \r\n
 
-                    // 2. Almacenamiento (BD o TXT según configuración)
+                    // 1. Detectar si viene encriptada desde el emisor
+                    if (frameToDecode.StartsWith("ENC|"))
+                    {
+                        string base64Payload = frameToDecode.Substring(4);
+                        frameToDecode = _encryptionService.Decrypt(base64Payload);
+                    }
+
+                    // 2. Decodificar la trama limpia
+                    var decodedFrame = FrameDecoder.Decode(frameToDecode);
+
+                    // Conservamos la trama original como llegó por el cable para auditoría
+                    decodedFrame.RawFrame = rawIncomingFrame.TrimEnd();
+
+                    // 3. Almacenamiento
                     await _storageService.SaveFrameAsync(decodedFrame);
 
-                    // 3. Mostrar en UI
+                    // 4. Mostrar en UI
                     WpfApp.Current.Dispatcher.Invoke(() =>
                     {
                         FrameHistory.Insert(0, decodedFrame);
@@ -116,7 +153,7 @@ namespace Incubator.Desktop.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    // Log: Trama corrupta o error de BD
+                    // Log: Trama corrupta, alterada o clave incorrecta
                 }
             }
         }

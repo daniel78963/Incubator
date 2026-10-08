@@ -49,6 +49,9 @@ namespace Incubator.Desktop
                     services.AddTransient<FileFrameStorageService>();
                     services.AddTransient<DbFrameStorageService>();
 
+                    // Servicio de encriptación AES para proteger datos sensibles
+                    services.AddSingleton<IEncryptionService, AesEncryptionService>();
+
                     // Registramos el Orquestador bajo la interfaz principal
                     services.AddTransient<IFrameStorageService, FrameStorageOrchestrator>();
 

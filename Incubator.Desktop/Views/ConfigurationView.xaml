@@ -16,7 +16,19 @@
                 </ui:CardControl.Header>
                 <StackPanel Orientation="Horizontal">
                     <RadioButton Content="Archivo Plano (.txt)" IsChecked="{Binding IsFlatFileSelected}" Margin="0,0,15,0"/>
-                    <RadioButton Content="Base de Datos (SQL)" IsChecked="{Binding IsDatabaseSelected}"/>
+                    <RadioButton Content="Base de Datos (SQL)" IsChecked="{Binding IsDatabaseSelected}"/> 
+                </StackPanel>                    
+            </ui:CardControl>
+
+            <ui:CardControl Margin="0,0,0,15">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <ui:TextBlock FontTypography="BodyStrong" Text="Criptografía"/>
+                        <ui:TextBlock FontTypography="Caption" Text="Las tramas se encriptarán antes de ser almacenadas." Foreground="Gray"/>
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="ChkEncrypt" Content="Encriptar trama" VerticalAlignment="Center"  IsChecked="{Binding IsStoreEncryptedSelected}"/>
                 </StackPanel>
             </ui:CardControl>
 

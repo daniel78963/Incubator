@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Incubator.Application.Interfaces;
+using Incubator.Infrastructure.Services;
 using System.IO.Ports;
 using System.Windows;
 
@@ -8,6 +9,8 @@ namespace Incubator.GenerateSignal
     {
         private SerialPort? _serialPort1;
         private SerialPort? _serialPort2;
+
+        private readonly IEncryptionService _encryptionService = new AesEncryptionService();
 
         public MainWindow()
         {
@@ -112,9 +115,26 @@ namespace Incubator.GenerateSignal
         {
             string baseFrame = TxtFrame.Text.Trim(); // Ej: A1A462213082703230013
 
-            // Asignamos seriales distintos a la misma trama base para verlos en el receptor[cite: 6]
-            string framePort1 = baseFrame.Substring(0, 21) + "9999" + baseFrame.Substring(25) + "\r\n"; //[cite: 7]
-            string framePort2 = baseFrame.Substring(0, 21) + "5555" + baseFrame.Substring(25) + "\r\n"; //[cite: 7]
+            //// Asignamos seriales distintos a la misma trama base para verlos en el receptor[cite: 6]
+            //string framePort1 = baseFrame.Substring(0, 21) + "9999" + baseFrame.Substring(25) + "\r\n"; //[cite: 7]
+            //string framePort2 = baseFrame.Substring(0, 21) + "5555" + baseFrame.Substring(25) + "\r\n"; //[cite: 7]
+
+            //// Disparamos en paralelo simulando llegada simultánea
+            //if (_serialPort1?.IsOpen == true) _serialPort1.Write(framePort1);
+            //if (_serialPort2?.IsOpen == true) _serialPort2.Write(framePort2);
+
+            // Seriales distintos para la simulación
+            string rawFrame1 = baseFrame.Substring(0, 21) + "9999" + baseFrame.Substring(25);
+            string rawFrame2 = baseFrame.Substring(0, 21) + "5555" + baseFrame.Substring(25);
+
+            // Evaluamos individualmente si se encripta
+            string framePort1 = ChkEncrypt1.IsChecked == true
+                ? $"ENC|{_encryptionService.Encrypt(rawFrame1)}\r\n"
+                : $"{rawFrame1}\r\n"; //[cite: 7]
+
+            string framePort2 = ChkEncrypt2.IsChecked == true
+                ? $"ENC|{_encryptionService.Encrypt(rawFrame2)}\r\n"
+                : $"{rawFrame2}\r\n"; //[cite: 7]
 
             // Disparamos en paralelo simulando llegada simultánea
             if (_serialPort1?.IsOpen == true) _serialPort1.Write(framePort1);

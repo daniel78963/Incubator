@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Incubator.GenerateSignal.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Simulador de Dispositivo - Incubator" Height="450" Width="500"
+        Title="Simulador de Dispositivo - Incubator" Height="450" Width="754"
         WindowStartupLocation="CenterScreen"
         Background="#F5F5F5">
 
@@ -24,24 +24,26 @@
                     <ComboBox x:Name="CmbPort1" Width="120" Margin="0,0,10,0"/>
                     <!-- Simulamos que este dispositivo tiene este serial -->
                     <TextBlock Text="Serial Simulado: 9999" Foreground="Gray" VerticalAlignment="Center"/>
+
+                    <StackPanel Margin="20,0,20,0" Orientation="Horizontal">
+                        <TextBlock Text="Baud Rate:" Margin="0,2,10,5"/>
+                        <ComboBox x:Name="CmbBaudRate1" Width="120" />
+                    </StackPanel>
+                    <CheckBox x:Name="ChkEncrypt1" Content="Encriptar trama" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <StackPanel Margin="0,0,20,0">
-                    <TextBlock Text="Baud Rate:" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="CmbBaudRate1" Width="120" />
-                </StackPanel>
-
+                
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                     <TextBlock Text="Canal 2 (USB):" Width="100" VerticalAlignment="Center"/>
                     <ComboBox x:Name="CmbPort2" Width="120" Margin="0,0,10,0"/>
                     <!-- Diferente serial para distinguirlo en la vista final -->
                     <TextBlock Text="Serial Simulado: 5555" Foreground="Gray" VerticalAlignment="Center"/>
-
-                </StackPanel>
-
-                <StackPanel Margin="0,0,20,0">
-                    <TextBlock Text="Baud Rate:" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="CmbBaudRate2" Width="120" />
+ 
+                    <StackPanel Margin="20,0,20,0" Orientation="Horizontal">
+                        <TextBlock Text="Baud Rate:" Margin="0,2,10,5"/>
+                        <ComboBox x:Name="CmbBaudRate2" Width="120" />
+                    </StackPanel>
+                    <CheckBox x:Name="ChkEncrypt2" Content="Encriptar trama" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <Button x:Name="BtnConnect" Content="Conectar Ambos" Width="120" Height="25" 
